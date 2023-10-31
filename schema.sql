@@ -12,6 +12,21 @@ CREATE TABLE animals (
 );
 
 /* day two query and upadte of the animals table*/
-ALTER TABLE animals
-ADD species VARCHAR(255);
 
+CREATE TABLE owners (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(255),
+    age INT
+);
+
+-- Create the species table
+CREATE TABLE species (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
+);
+
+ALTER TABLE animals
+MODIFY COLUMN id INT AUTO_INCREMENT PRIMARY KEY,
+DROP COLUMN species,
+ADD COLUMN species_id INT,
+ADD COLUMN owner_id INT;
