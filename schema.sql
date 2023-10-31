@@ -11,3 +11,7 @@ CREATE TABLE animals (
    weight_kg decimal
 );
 
+/* day two query and upadte of the animals table*/
+ALTER TABLE animals
+ADD species VARCHAR(255);
+
