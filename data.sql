@@ -17,15 +17,8 @@ INSERT INTO animals (id, name, date_of_birth, escape_attempts, neutered, weight_
 
     
 /* day 3 of the query multiple tables*/
--- Create the owners table
-CREATE TABLE owners (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    full_name VARCHAR(255),
-    age INT
-);
 
 -- Insert data into the owners table
-
 INSERT INTO owners (full_name, age) VALUES
     ('Sam Smith', 34),
     ('Jennifer Orwell', 19),
@@ -34,25 +27,11 @@ INSERT INTO owners (full_name, age) VALUES
     ('Dean Winchester', 14),
     ('Jodie Whittaker', 38);
 
--- Create the species table
-CREATE TABLE species (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255)
-);
-
 -- Insert data into the species table
 INSERT INTO species (name) VALUES
     ('Pokemon'),
     ('Digimon');
 
-ALTER TABLE animals
-MODIFY COLUMN id INT AUTO_INCREMENT PRIMARY KEY,
-DROP COLUMN species,
-ADD COLUMN species_id INT,
-ADD COLUMN owner_id INT;
-
--- Modify inserted animals to include 'species_id'
--- and assign 'species_id' based on the animal name
 UPDATE animals
 SET species_id = CASE
     WHEN name LIKE '%mon' THEN 2
