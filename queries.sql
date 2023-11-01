@@ -118,4 +118,69 @@ GROUP BY o.full_name
 ORDER BY animal_count DESC
 LIMIT 1;
 
+/* day 4 join table and visits*/
 
+SELECT a.name AS last_animal_seen
+FROM animals AS a
+JOIN visits AS v ON a.id = v.animal_id
+WHERE v.vet_id = (SELECT id FROM vets WHERE name = 'Vet William Tatcher')
+ORDER BY v.visit_date DESC
+LIMIT 1;
+
+SELECT COUNT(DISTINCT v.animal_id) AS total_animals_seen
+FROM visits AS v
+WHERE v.vet_id = (SELECT id FROM vets WHERE name = 'Vet Stephanie Mendez');
+
+SELECT v.name AS vet_name, s.name AS specialization
+FROM vets AS v
+LEFT JOIN specialisation AS sp ON v.id = sp.vet_id
+LEFT JOIN species AS s ON sp.species_id = s.id;
+
+SELECT a.name AS animal_name, v.visit_date
+FROM animals AS a
+JOIN visits AS v ON a.id = v.animal_id
+WHERE v.vet_id = (SELECT id FROM vets WHERE name = 'Vet Stephanie Mendez')
+    AND v.visit_date BETWEEN '2020-04-01' AND '2020-08-30';
+
+SELECT a.name AS most_visited_animal, max_visit_count AS visit_count
+FROM (
+    SELECT v.animal_id, COUNT(v.animal_id) AS max_visit_count
+    FROM visits AS v
+    GROUP BY v.animal_id
+    ORDER BY max_visit_count DESC
+    LIMIT 1
+) AS max_visits
+JOIN animals AS a ON max_visits.animal_id = a.id;
+
+SELECT a.name AS first_visit_animal, v.visit_date
+FROM visits AS v
+JOIN animals AS a ON v.animal_id = a.id
+WHERE v.vet_id = (SELECT id FROM vets WHERE name = 'Vet Maisy Smith')
+ORDER BY v.visit_date ASC
+LIMIT 1;
+
+SELECT COUNT(*) AS non_specialized_visits
+FROM visits AS v
+LEFT JOIN specialisation AS sp ON v.vet_id = sp.vet_id
+WHERE sp.species_id IS NULL;
+
+SELECT
+    a.name AS animal_name,
+    v.visit_date AS date_of_visit,
+    ve.name AS vet_name
+FROM visits AS v
+JOIN animals AS a ON v.animal_id = a.id
+JOIN vets AS ve ON v.vet_id = ve.id
+WHERE v.visit_date = (SELECT MAX(visit_date) FROM visits WHERE animal_id = a.id);
+
+SELECT
+    s.name AS specialty_name,
+    COUNT(*) AS specialization_count
+FROM specialisation AS sp
+JOIN vets AS ve ON sp.vet_id = ve.id
+JOIN species AS s ON sp.species_id = s.id
+JOIN owners AS o ON ve.id = o.id
+WHERE o.full_name = 'Maisy Smith'
+GROUP BY s.name
+ORDER BY specialization_count DESC
+LIMIT 1;
