@@ -163,3 +163,24 @@ SELECT COUNT(*) AS non_specialized_visits
 FROM visits AS v
 LEFT JOIN specialisation AS sp ON v.vet_id = sp.vet_id
 WHERE sp.species_id IS NULL;
+
+SELECT
+    a.name AS animal_name,
+    v.visit_date AS date_of_visit,
+    ve.name AS vet_name
+FROM visits AS v
+JOIN animals AS a ON v.animal_id = a.id
+JOIN vets AS ve ON v.vet_id = ve.id
+WHERE v.visit_date = (SELECT MAX(visit_date) FROM visits WHERE animal_id = a.id);
+
+SELECT
+    s.name AS specialty_name,
+    COUNT(*) AS specialization_count
+FROM specialisation AS sp
+JOIN vets AS ve ON sp.vet_id = ve.id
+JOIN species AS s ON sp.species_id = s.id
+JOIN owners AS o ON ve.id = o.id
+WHERE o.full_name = 'Maisy Smith'
+GROUP BY s.name
+ORDER BY specialization_count DESC
+LIMIT 1;
